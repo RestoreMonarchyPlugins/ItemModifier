@@ -16,6 +16,7 @@ Add ItemModifications like following:
 ```
 
 Available Modifications:
+* ShouldDropOnDeath (Items)
 * Width (Bags)
 * Height (Bags)
 * Health (Structures/Barricades)

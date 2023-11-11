@@ -13,6 +13,8 @@ namespace ItemModifier
 
         internal static class Fields
         {
+            internal static PropertyInfo ShouldDropOnDeath; 
+
             internal static FieldInfo Width;
             internal static FieldInfo Height;
 
@@ -55,7 +57,7 @@ namespace ItemModifier
         }
 
         private static void LoadItemModifications(int a)
-        {
+        { 
             Type type = typeof(ItemBagAsset);
             Fields.Width = type.GetField("_width", BindingFlags.NonPublic | BindingFlags.Instance);
             Fields.Height = type.GetField("_height", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -81,6 +83,9 @@ namespace ItemModifier
             Fields.Generator_Capacity = type.GetField("_capacity", BindingFlags.Instance | BindingFlags.NonPublic);
             Fields.Generator_Burn = type.GetField("_burn", BindingFlags.Instance | BindingFlags.NonPublic);
 
+            type = typeof(ItemAsset);
+            Fields.ShouldDropOnDeath = type.GetProperty("shouldDropOnDeath", BindingFlags.Instance | BindingFlags.NonPublic);
+
             foreach (ItemModification modification in Instance.Configuration.Instance.Items)
             {
                 Modify(modification);
@@ -100,6 +105,11 @@ namespace ItemModifier
             {
                 LogError("Item ID {0} is a cosmetic.", modification.ID);
                 return;
+            }
+
+            if (modification.ShouldDropOnDeath.HasValue)
+            {
+                SetShouldDropOnDeath(asset, modification.ShouldDropOnDeath.Value);
             }
 
             if (modification.Height.HasValue || modification.Width.HasValue)
@@ -270,6 +280,22 @@ namespace ItemModifier
                 }
             }
         }
+
+        #region Item
+
+        public static bool SetShouldDropOnDeath(ItemAsset asset, bool value)
+        {
+            if (Fields.ShouldDropOnDeath == null)
+            {
+                LogError("Setting shouldDropOnDeath of Item ID {0}", asset.id);
+                return false;
+            }
+
+            Fields.ShouldDropOnDeath.SetValue(asset, value);
+            return true;
+        }
+
+        #endregion
 
         #region Bag
         public static bool SetWidth(ItemBagAsset asset, byte width)
