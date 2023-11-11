@@ -10,6 +10,11 @@ namespace ItemModifier
         [XmlAttribute]
         public string Name { get; set; }
 
+        #region Items
+        public bool? ShouldDropOnDeath { get; set; }
+        public bool ShouldSerializeShouldDropOnDeath() => Width != null;
+        #endregion
+
         #region Bags
         public byte? Width { get; set; }
         public bool ShouldSerializeWidth() => Width != null;
