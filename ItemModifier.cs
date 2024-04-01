@@ -84,7 +84,7 @@ namespace ItemModifier
             Fields.Generator_Burn = type.GetField("_burn", BindingFlags.Instance | BindingFlags.NonPublic);
 
             type = typeof(ItemAsset);
-            Fields.ShouldDropOnDeath = type.GetProperty("shouldDropOnDeath", BindingFlags.Instance | BindingFlags.NonPublic);
+            Fields.ShouldDropOnDeath = type.GetProperty("shouldDropOnDeath", BindingFlags.Instance | BindingFlags.Public);
 
             foreach (ItemModification modification in Instance.Configuration.Instance.Items)
             {
